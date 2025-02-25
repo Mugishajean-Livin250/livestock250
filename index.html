@@ -1,65 +1,81 @@
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Livestock Health Advisor</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Maternal Health SMS Advisor</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 50px;
-        }
-        .container {
-            max-width: 500px;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        input, button {
-            width: 90%;
-            padding: 10px;
-            margin-top: 10px;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 400px;
+        margin: auto;
+        padding: 20px;
+        text-align: center;
+      }
+      input,
+      select,
+      button {
+        display: block;
+        width: 100%;
+        margin: 10px 0;
+        padding: 10px;
+      }
+      #result {
+        margin-top: 20px;
+        font-weight: bold;
+        color: darkred;
+      }
     </style>
-</head>
-<body>
-    <h1>Livestock Health Advisor</h1>
-    <div class="container">
-        <h2>Check Animal Health</h2>
-        <label for="symptoms">Enter Symptoms:</label>
-        <input type="text" id="symptoms" placeholder="e.g., Fever, Loss of Appetite">
-        <button onclick="suggestRemedy()">Get Remedy</button>
-        <h3>Suggested Remedy:</h3>
-        <p id="remedy"></p>
-    </div>
+  </head>
+  <body>
+    <h2>Maternal Health SMS Advisor</h2>
+    <label
+      >Gestational Age (weeks): <input type="number" id="gestationalAge"
+    /></label>
+    <label
+      >Send ANC Reminder?
+      <select id="sendANC">
+        <option value="no">No</option>
+        <option value="yes">Yes</option>
+      </select></label
+    >
+    <label
+      >Send Intervention SMS?
+      <select id="sendIntervention">
+        <option value="no">No</option>
+        <option value="yes">Yes</option>
+      </select></label
+    >
+    <label
+      >Send Control Health SMS?
+      <select id="sendControl">
+        <option value="no">No</option>
+        <option value="yes">Yes</option>
+      </select></label
+    >
+    <button onclick="processSMS()">Check SMS Dispatch</button>
+    <div id="result"></div>
+
     <script>
-        function suggestRemedy() {
-            let symptoms = document.getElementById("symptoms").value.toLowerCase();
-            let remedy = "No matching remedy found. Consult a vet.";
-            
-            if (symptoms.includes("fever")) {
-                if (symptoms.includes("skin nodules")) {
-                    remedy = "Lumpy Skin Disease: Isolate animal, apply antiseptic, administer antibiotics, and vaccinate healthy animals.";
-                } else if (symptoms.includes("mouth ulcers") || symptoms.includes("drooling")) {
-                    remedy = "Foot-and-Mouth Disease: Isolate infected animal, provide soft food, apply saline solution, and report severe cases.";
-                } else if (symptoms.includes("swollen udder") || symptoms.includes("pus in milk")) {
-                    remedy = "Mastitis: Milk out infected udder, apply warm compresses, use prescribed antibiotics, and maintain udder hygiene.";
-                } else if (symptoms.includes("persistent coughing") || symptoms.includes("weight loss")) {
-                    remedy = "Bovine Tuberculosis: Isolate & test animal, avoid consuming meat/milk, and report to a vet immediately.";
-                } else {
-                    remedy = "General Fever: Provide clean water, balanced diet, and consult a vet if persists.";
-                }
-            } else if (symptoms.includes("sudden death") && symptoms.includes("blood oozing")) {
-                remedy = "Anthrax: Do NOT open carcass, report immediately, and burn & bury carcass safely.";
-            } else if (symptoms.includes("no symptoms")) {
-                remedy = "Preventive Care: Follow vaccination schedules, provide proper nutrition, ensure biosecurity measures, and maintain hygiene.";
-            }
-            
-            document.getElementById("remedy").innerText = remedy;
+      function processSMS() {
+        let gestationalAge = document.getElementById("gestationalAge").value;
+        let sendANC = document.getElementById("sendANC").value;
+        let sendIntervention =
+          document.getElementById("sendIntervention").value;
+        let sendControl = document.getElementById("sendControl").value;
+        let message = "No SMS Sent.";
+
+        if (sendANC === "yes") {
+          message = `ANC Reminder: Schedule an appointment. Dispatch 2 days prior to ANC date.`;
+        } else if (sendIntervention === "yes" && gestationalAge > 0) {
+          message = `Intervention SMS: Health advice for week ${gestationalAge}.`;
+        } else if (sendControl === "yes") {
+          message = "Control Health SMS: General maternal health advice sent.";
         }
+
+        document.getElementById("result").innerText = message;
+      }
     </script>
-</body>
+  </body>
 </html>
